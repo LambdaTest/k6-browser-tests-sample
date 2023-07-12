@@ -30,12 +30,12 @@ export default async function () {
 
     let element = await page.$("[name=\"q\"]");
     await element.click();
-    await element.type("Playwright");
+    await element.type("K6");
     await element.press("Enter");
     let title = await page.title();
 
     try {
-      expect(title).to.equal("Playwright at DuckDuckGo");
+      expect(title).to.equal("K6 at DuckDuckGo");
       // Mark the test as passed or failed
       await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: "setTestStatus", arguments: {status: "passed", remark: "Assertions passed" },})}`);
     } catch (e) {
