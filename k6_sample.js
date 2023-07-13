@@ -19,7 +19,7 @@ export default async function () {
     },
   };
 
-  const wsURL = `wss://cdp.lambdatest.com/puppeteer?capabilities=${encodeURIComponent(JSON.stringify(capabilities))}`
+  const wsURL = `wss://cdp.lambdatest.com/k6?capabilities=${encodeURIComponent(JSON.stringify(capabilities))}`
   const browser = chromium.connect(wsURL);
 
   const page = browser.newPage();
