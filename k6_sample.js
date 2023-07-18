@@ -1,5 +1,6 @@
 import { chromium } from 'k6/experimental/browser';
 import { expect } from 'https://jslib.k6.io/k6chaijs/4.3.4.3/index.js';
+
 export default async function () {
   const capabilities = {
     "browserName": "Chrome",
@@ -26,7 +27,7 @@ export default async function () {
 
   try {
     await page.goto("https://duckduckgo.com");
-    await page.screenshot({path: 'screenshots/k6Screenshot.png'});
+    await page.screenshot({ path: 'screenshots/k6Screenshot.png' });
 
     let element = await page.$("[name=\"q\"]");
     await element.click();
@@ -34,16 +35,14 @@ export default async function () {
     await element.press("Enter");
     let title = await page.title();
 
-    try {
-      expect(title).to.equal("K6 at DuckDuckGo");
-      // Mark the test as passed or failed
-      await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: "setTestStatus", arguments: {status: "passed", remark: "Assertions passed" },})}`);
-    } catch (e) {
-      await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({action: "setTestStatus", arguments: { status: "failed", remark: e.stack }})}`);
-      console.log("Error:: ", e.stack);
-    }
+    expect(title).to.equal("K6 at DuckDuckGo");
+    // Mark the test as passed or failed
+    await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: "setTestStatus", arguments: { status: "passed", remark: "Assertions passed" }, })}`);
+  } catch (e) {
+    console.log('Error:: ', JSON.stringify(e))
+    await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: 'setTestStatus', arguments: { status: 'failed', remark: JSON.stringify(e) } })}`)
   } finally {
-    page.close();
-    browser.close();
+    page.close()
+    browser.close()
   }
-};
+}
