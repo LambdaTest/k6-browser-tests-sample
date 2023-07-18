@@ -8,7 +8,7 @@ export default async function () {
     'LT:Options': {
       'platform': 'MacOS Ventura',
       'build': 'K6 Build',
-      'name': 'K6 Test',
+      'name': 'K6 Geolocation Test',
       'user': `${__ENV.LT_USERNAME}`,
       'accessKey': `${__ENV.LT_ACCESS_KEY}`,
       'network': true,
@@ -16,7 +16,7 @@ export default async function () {
       'console': true,
       'tunnel': false, // Add tunnel configuration if testing locally hosted webpage
       'tunnelName': '', // Optional
-      'geoLocation': 'AU' // country code can be fetched from https://www.lambdatest.com/capabilities-generator/
+      'geoLocation': 'AU/BS' // geoLocation code can be fetched from https://www.lambdatest.com/capabilities-generator/
     }
   }
 
