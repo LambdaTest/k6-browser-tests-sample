@@ -16,7 +16,7 @@ export default async function () {
       'console': true,
       'tunnel': false, // Add tunnel configuration if testing locally hosted webpage
       'tunnelName': '', // Optional
-      'geoLocation': 'AU' // country code can be fetched from https://www.lambdatest.com/capabilities-generator/
+      'geoLocation': 'AU/BS' // country code can be fetched from https://www.lambdatest.com/capabilities-generator/
     }
   }
 
