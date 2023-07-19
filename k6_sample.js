@@ -1,5 +1,6 @@
 import { chromium } from 'k6/experimental/browser';
 import { expect } from 'https://jslib.k6.io/k6chaijs/4.3.4.3/index.js';
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 
 export default async function () {
   const capabilities = {
@@ -52,4 +53,11 @@ export default async function () {
 async function teardown(page, browser) {
   await page.close();
   await browser.close();
+}
+
+// Save the test reports
+export function handleSummary(data) {
+  return {
+    'reports/TestSummaryReport.html': htmlReport(data, { debug: true })
+  };
 }
