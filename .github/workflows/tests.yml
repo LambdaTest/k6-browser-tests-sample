@@ -1,0 +1,67 @@
+name: K6 Performance Tests
+on:
+  # Add the triggers as required
+  push:
+    branches:
+      - '**'
+
+  pull_request:
+    branches:
+      - '**'
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # This example triggers the workflow every day at 9:00 AM
+    - cron:  '0 9 * * *'
+
+  # Trigger the workflow manually
+  workflow_dispatch:
+
+env:
+  LT_USERNAME: ${{ secrets.LT_USERNAME }}
+  LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
+  K6_BROWSER_ENABLED: true
+
+
+jobs:
+  k6-browser-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run K6 sample test
+        uses: grafana/k6-action@v0.3.0
+        with:
+          filename: k6_sample.js
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: k6-report
+          path: reports/TestSummaryReport.html
+
+  k6-browser-smartUI-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run K6 sample test
+        uses: grafana/k6-action@v0.3.0
+        with:
+          filename: k6_smartUI_sample.js
+
+  k6-browser-geolocation-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run K6 sample test
+        uses: grafana/k6-action@v0.3.0
+        with:
+          filename: k6_geolocation_testing.js
+
