@@ -37,12 +37,19 @@ export default async function () {
 
     expect(title).to.equal("K6 at DuckDuckGo");
     // Mark the test as passed or failed
-    await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: "setTestStatus", arguments: { status: "passed", remark: "Assertions passed" }, })}`);
+    await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: "setTestStatus", arguments: { status: "passed", remark: "Assertions passed" },})}`);
+
+    await teardown(page, browser)
   } catch (e) {
     console.log('Error:: ', JSON.stringify(e))
     await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: 'setTestStatus', arguments: { status: 'failed', remark: JSON.stringify(e) } })}`)
-  } finally {
-    page.close()
-    browser.close()
+
+    await teardown(page, browser)
+    throw e
   }
+};
+
+async function teardown(page, browser) {
+  await page.close();
+  await browser.close();
 }

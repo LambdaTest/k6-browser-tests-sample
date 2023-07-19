@@ -30,7 +30,7 @@ export default async function () {
     await page.goto("https://duckduckgo.com");
 
     // Add the following command in order to take screenshot in SmartUI
-    await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: "smartui.takeScreenshot", arguments: { screenshotName: "Homepage" } })}`);
+    await captureSmartUIScreenshot(page, "Homepage")
 
     let element = await page.$("[name=\"q\"]");
     await element.click();
@@ -39,13 +39,47 @@ export default async function () {
     let title = await page.title();
 
     expect(title).to.equal("K6 at DuckDuckGo");
+
+    // Pass the `page` object. Add `screennshotName` if you want to fetch response for a specific screenshot
+    await validateSmartUIScreenshots(page)
+
     // Mark the test as passed or failed
     await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: "setTestStatus", arguments: { status: "passed", remark: "Assertions passed" },})}`);
-    } catch (e) {
+    await teardown(page, browser)
+  } catch (e) {
       console.log('Error:: ', JSON.stringify(e))
       await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: 'setTestStatus', arguments: { status: 'failed', remark: JSON.stringify(e) } })}`)
-    } finally {
-    page.close();
-    browser.close();
+
+    await teardown(page, browser)
+    throw e
   }
 };
+
+async function captureSmartUIScreenshot(page, screenshotName) {
+  await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: "smartui.takeScreenshot", arguments: { screenshotName: screenshotName } })}`);
+}
+
+async function teardown(page, browser) {
+  await page.close();
+  await browser.close();
+}
+
+const validateSmartUIScreenshots = async (page, screenshotName) => {
+  try {
+    await page.waitForTimeout(5000) // Added delay to get reports of all screenshots captured
+
+    let screenshotResponse = JSON.parse(await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: 'smartui.fetchScreenshotStatus', arguments: { screenshotName }})}`))
+    console.log('screenshotStatus response: ', screenshotResponse)
+
+    if (screenshotResponse.screenshotsData && Array.isArray(screenshotResponse.screenshotsData)) {
+      for (let i = 0; i < screenshotResponse.screenshotsData.length; i++) {
+        let screenshot = screenshotResponse.screenshotsData[i];
+        if (screenshot.screenshotStatus !== "Approved") {
+          throw new Error(`Screenshot status is not approved for the screenshot ${screenshot.screenshotName}`);
+        }
+      }
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+}
