@@ -2,6 +2,23 @@ import { chromium } from 'k6/experimental/browser';
 import { expect } from 'https://jslib.k6.io/k6chaijs/4.3.4.3/index.js';
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 
+// Configure the options as required. Docs: https://k6.io/docs/using-k6/k6-options/reference/
+export const options = {
+  throw: true,
+  scenarios: {
+    per_vu_scenario: {
+      executor: "per-vu-iterations",
+      vus: 2,
+      iterations: 2,
+      startTime: "0s",
+    },
+  },
+  // thresholds: {
+  //   'http_req_duration': ['avg<250', 'p(95)<300'],
+  //   'http_req_connecting{cdnAsset:true}': ['p(95)<100'],
+  // },
+};
+
 export default async function () {
   const capabilities = {
     "browserName": "Chrome",
