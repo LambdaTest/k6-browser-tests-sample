@@ -41,6 +41,18 @@ jobs:
           name: k6-report
           path: reports/TestSummaryReport.html
 
+  k6-scenarios browser-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run K6 sample test
+        uses: grafana/k6-action@v0.3.0
+        with:
+          filename: k6_scenarios_sample.js
+
   k6-browser-smartUI-test:
     runs-on: ubuntu-latest
 
