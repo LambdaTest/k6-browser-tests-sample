@@ -66,7 +66,7 @@ async function teardown(page, browser) {
 
 const validateSmartUIScreenshots = async (page, screenshotName) => {
   try {
-    await page.waitForTimeout(5000) // Added delay to get reports of all screenshots captured
+    await page.waitForTimeout(10000) // Added delay to get reports of all screenshots captured
 
     let screenshotResponse = JSON.parse(await page.evaluate(_ => {}, `lambdatest_action: ${JSON.stringify({ action: 'smartui.fetchScreenshotStatus', arguments: { screenshotName }})}`))
     console.log('screenshotStatus response: ', screenshotResponse)
