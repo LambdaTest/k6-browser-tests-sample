@@ -41,7 +41,7 @@ jobs:
           name: k6-report
           path: reports/TestSummaryReport.html
 
-  k6-scenarios browser-test:
+  k6-scenarios-browser-test:
     runs-on: ubuntu-latest
 
     steps:
