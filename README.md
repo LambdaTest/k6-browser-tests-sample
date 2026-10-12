@@ -1,5 +1,7 @@
 # Run k6 Browser Tests on TestMu AI (Formerly LambdaTest)
 
+> Run End-to-End (E2E) testing with k6 Browser across real browsers on the TestMu AI cloud.
+
 <p align="center">
   <a href="https://www.testmuai.com/"><img src="https://img.shields.io/badge/MADE%20BY%20TestMu%20AI-000000.svg?style=for-the-badge&labelColor=000" alt="Made by TestMu AI"></a>
   <a href="https://github.com/grafana/k6/releases"><img src="https://img.shields.io/github/v/release/grafana/k6.svg?style=for-the-badge&labelColor=000000" alt="k6 version"></a>
